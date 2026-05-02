@@ -1,0 +1,43 @@
+html, body {
+    background-color: lightblue;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    nav {
+        ul {
+            text-decoration: none;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            display: inline;
+            margin-right: 15px;
+            text-decoration: none;
+        }
+
+        a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+
+            &:hover {
+                color: #0066cc;
+            }
+        }
+        
+    }
+    img {
+            width: 200px;
+            margin: auto;
+            border-width: 10px;
+            border-radius: 5px;
+            border-color: lightcoral;
+            border-style: solid;
+        }
+}
