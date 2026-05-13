@@ -72,6 +72,77 @@ app.use((req, res, next) => {
     next();
 });
 
+/**
+ * Configure Express middleware
+ */
+
+// Middleware to make NODE_ENV available to all templates
+app.use((req, res, next) => {
+    res.locals.NODE_ENV = NODE_ENV.toLowerCase() || 'production';
+
+    // Continue to the next middleware or route handler
+    next();
+});
+
+app.use((req, res, next) => {
+    // Skip logging for routes that start with /. (like /.well-known/)
+    if (!req.path.startsWith('/.')) {
+        console.log(`${req.method} ${req.url}`);
+    }
+    next(); // Pass control to the next middleware or route
+});
+
+// Middleware to add global data to all templates
+app.use((req, res, next) => {
+    // Add current year for copyright
+    res.locals.currentYear = new Date().getFullYear();
+
+    next();
+});
+
+// Global middleware for time-based greeting
+app.use((req, res, next) => {
+    const currentHour = new Date().getHours();
+
+    if (currentHour < 12) {
+        res.locals.greeting = 'Good morning!';
+    } else if (currentHour < 17) {
+        res.locals.greeting = 'Good afternoon!';
+    } else {
+        res.locals.greeting = 'Good Evening!';
+    }
+
+    next();
+});
+
+// Global middleware for random theme selection
+app.use((req, res, next) => {
+    const themes = ['blue-theme', 'green-theme', 'red-theme'];
+
+    // Your task: Pick a random theme from the array
+    const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+    res.locals.bodyClass = randomTheme;
+
+    next();
+});
+
+// Global middleware to share query parameters with templates
+app.use((req, res, next) => {
+    // Make req.query available to all templates for debugging and conditional rendering
+    res.locals.queryParams = req.query || {};
+    next();
+});
+
+// Route-specific middleware that sets custom headers
+const addDemoHeaders = (req, res, next) => {
+    // Your task: Set custom headers using res.setHeader()
+    // Add a header called 'X-Demo-Page' with value 'true'
+    res.setHeader('X-Demo-Page', 'true');
+    // Add a header called 'X-Middleware-Demo' with any message you want
+    res.setHeader('X-Middleware-Demo', 'What is up peeps!');
+    next();
+};
+
 // When in development mode, start a WebSocket server for live reloading
 if (NODE_ENV.includes('dev')) {
     const ws = await import('ws');
@@ -97,6 +168,13 @@ app.get('/catalog', (req, res) => {
     res.render('catalog', {
         title: 'Course Catalog',
         courses: courses
+    });
+});
+
+// Demo page route with header middleware
+app.get('/demo', addDemoHeaders, (req, res) => {
+    res.render('demo', {
+        title: 'Middleware Demo Page'
     });
 });
 

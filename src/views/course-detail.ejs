@@ -9,6 +9,15 @@
     <div class="sections">
         <div class="sections-header">
             <h2>Available Sections</h2>
+            <% if (queryParams.sort) { %>
+        <div class="sort-message">
+            <p>Currently sorted by: <%= queryParams.sort %></p>
+        </div>
+            <% } else { %>
+        <div class="sort-message">
+            <p>No sorting applied, using default sorting by time.</p>
+        </div>
+            <% } %>
             <div class="sort-options">
                 <span>Sort by: </span>
                 <a href="/catalog/<%= course.id %>" class="<%= currentSort === 'time' ? 'active' : '' %>">Time</a>
