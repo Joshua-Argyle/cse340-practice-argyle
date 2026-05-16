@@ -1,0 +1,38 @@
+<%- include('../partials/header') %>
+<main>
+    <h1>Department Faculty</h1>
+    <p>Browse our available faculty members and click on any faculty member to see detailed information including office location, phone number, and email address.</p>
+
+    <div class="sections">
+        <div class="sections-header">
+            <h2>Faculty Members</h2>
+            <% if (queryParams.sort) { %>
+        <div class="sort-message">
+            <p>Currently sorted by: <%= queryParams.sort %></p>
+        </div>
+            <% } else { %>
+        <div class="sort-message">
+            <p>No sorting applied, using default sorting by name.</p>
+        </div>
+            <% } %>
+            <div class="sort-options">
+                <span>Sort by: </span>
+                <a href="/faculty" class="<%= currentSort === 'name' ? 'active' : '' %>">Name</a>
+                <a href="/faculty?sort=title" class="<%= currentSort === 'title' ? 'active' : '' %>">Title</a>
+                <a href="/faculty?sort=department" class="<%= currentSort === 'department' ? 'active' : '' %>">Department</a>
+            </div>
+        </div>
+    <div class="faculty-list">
+        <% faculty.forEach(member => { %>
+            <div class="faculty-card">
+                <h3><a href="/faculty/<%= member.id %>"><%= member.name %></a></h3>
+                <p class="faculty-title"><%= member.title %></p>
+                <p class="faculty-department"><%= member.department %></p>
+            </div>
+        <% }); %>
+    </div>
+    <div class="navigation">
+        <p><a href="/">&larr; Back to Home Page</a></p>
+    </div>
+</main>
+<%- include('../partials/footer') %>
