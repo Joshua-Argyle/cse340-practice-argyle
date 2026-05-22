@@ -5,7 +5,7 @@ import { getSectionsByCourseSlug } from '../../models/catalog/catalog.js';
 const catalogPage = async (req, res) => {
     const courses = await getAllCourses();
 
-    res.render('catalog', {
+    res.render('catalog/list', {
         title: 'Course Catalog',
         courses: courses
     });
@@ -28,7 +28,7 @@ const courseDetailPage = async (req, res, next) => {
 
     //const sortedSections = getSortedSections(course.sections, sortBy);
 
-    res.render('course-detail', {
+    res.render('catalog/detail', {
         title: `${course.slug} - ${course.name}`,
         course: { ...course, sections: sections },
         currentSort: sortBy
