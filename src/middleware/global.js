@@ -27,7 +27,7 @@ const getCurrentGreeting = () => {
  * - renderStyles() - Outputs all CSS in priority order (high to low)
  * - renderScripts() - Outputs all JS in priority order (high to low)
  */
-const setHeadAssetsFunctionality = (res) => {
+const setHeadAssetsFunctionality = (req, res) => {
     res.locals.styles = [];
     res.locals.scripts = [];
     res.addStyle = (css, priority = 0) => {
@@ -51,6 +51,12 @@ const setHeadAssetsFunctionality = (res) => {
             .map(item => item.content)
             .join('\n');
     };
+    // Convenience variable for UI state based on session state
+    res.locals.isLoggedIn = false;
+    if (req.session && req.session.user) {
+        res.locals.isLoggedIn = true;
+}
+
 };
 
 /**
@@ -75,7 +81,7 @@ const addLocalVariables = (req, res, next) => {
     const randomTheme = themes[Math.floor(Math.random() * themes.length)];
     res.locals.bodyClass = randomTheme;
 
-    setHeadAssetsFunctionality(res)
+    setHeadAssetsFunctionality(req, res);
 
     // Continue to the next middleware or route handler
     next();
