@@ -10,9 +10,11 @@
         <p><strong>Office Location:</strong> <%= faculty.office %></p>
         <p><strong>Phone Number:</strong> <%= faculty.phone %></p>
         <p><strong>Email Address:</strong> <a href="mailto:<%= faculty.email %>"><%= faculty.email %></a></p>
+        <img class="faculty-photo" src="/images/faculty/<%= faculty.slug %>.jpg" alt="Profile image of <%= faculty.name %>">
 
     <div class="navigation">
         <p><a href="/faculty">&larr; Back to Department Faculty Directory</a></p>
+        
     </div>
 </main>
 <%- include('../partials/footer') %>

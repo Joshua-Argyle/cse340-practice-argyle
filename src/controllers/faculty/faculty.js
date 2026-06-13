@@ -1,4 +1,4 @@
-import { getFacultyById, getSortedFaculty } from '../../models/faculty/faculty.js';
+import { getFacultyById, getSortedFaculty, getFacultyBySlug } from '../../models/faculty/faculty.js';
 
 // Route handler for the faculty list page
 const facultyListPage = async(req, res) => {

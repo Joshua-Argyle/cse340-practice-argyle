@@ -1,32 +1,11 @@
-import { body, validationResult } from 'express-validator';
 import { findUserByEmail, verifyPassword } from '../../models/forms/login.js';
+import { validationResult } from 'express-validator';
 import { Router } from 'express';
-
-const router = Router();
-
-/**
- * Validation rules for login form
- */
-const loginValidation = [
-    body('email')
-        .trim()
-        .isEmail()
-        .withMessage('Please provide a valid email address')
-        .normalizeEmail()
-        .isLength({ max : 255 })
-        .withMessage('Email must be less than 255 characters'),
-
-    body('password')
-        .notEmpty()
-        .withMessage('Password Required')
-        .isLength({ min: 8, max: 128 })
-        .withMessage('Password must be between 8 and 128 characters'),
-];
 
 /**
  * Display the login form.
  */
-const showLoginForm = (req, res) => {
+export const showLoginForm = (req, res) => {
     // TODO: Render the login form view (forms/login/form)
     res.render('forms/login/form', { title: 'User Login' });
 };
@@ -34,7 +13,7 @@ const showLoginForm = (req, res) => {
 /**
  * Process login form submission.
  */
-const processLogin = async (req, res) => {
+export const processLogin = async (req, res) => {
     // Check for validation errors
     const errors = validationResult(req);
 
@@ -153,10 +132,5 @@ const showDashboard = (req, res) => {
     });
 };
 
-// Routes
-router.get('/', showLoginForm);
-router.post('/', loginValidation, processLogin);
-
 // Export router as default, and specific functions for root-level routes
-export default router;
 export { processLogout, showDashboard };

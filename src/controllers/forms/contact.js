@@ -1,13 +1,11 @@
 import { Router } from 'express';
-import { body, validationResult } from 'express-validator';
+import { validationResult } from 'express-validator';
 import { createContactForm, getAllContactForms } from '../../models/forms/contact.js';
-
-const router = Router();
 
 /**
  * Display the contact form page.
  */
-const showContactForm = (req, res) => {
+export const showContactForm = (req, res) => {
     res.render('forms/contact/form', {
         title: 'Contact Us'
     });
@@ -18,7 +16,7 @@ const showContactForm = (req, res) => {
  * If validation passes, save to database and redirect.
  * If validation fails, log errors and redirect back to form.
  */
-const handleContactSubmission = async (req, res) => {
+export const handleContactSubmission = async (req, res) => {
     // Check for validation errors
     const errors = validationResult(req);
 
@@ -50,7 +48,7 @@ const handleContactSubmission = async (req, res) => {
 /**
  * Display all contact form submissions.
  */
-const showContactResponses = async (req, res) => {
+export const showContactResponses = async (req, res) => {
     let contactForms = [];
 
     try {
@@ -64,43 +62,3 @@ const showContactResponses = async (req, res) => {
         contactForms
     });
 };
-
-/**
- * GET /contact - Display the contact form
- */
-router.get('/', showContactForm);
-
-/**
- * POST /contact - Handle contact form submission with validation
- */
-router.post('/',
-    [
-        body('subject')
-            .trim()
-            .isLength({ min: 2, max: 255 })
-            .withMessage('Subject must be between 2 and 255 characters')
-            .matches(/^[a-zA-Z0-9\s\-.,!?]+$/)
-            .withMessage('Subject contains invalid characters'),
-        body('message')
-            .trim()
-            .isLength({ min: 10, max: 2000 })
-            .withMessage('Message must be between 10 and 2000 characters')
-            .custom((value) => {
-                // Check for spam patterns (excessive repetition)
-                const words = value.split(/\s+/);
-                const uniqueWords = new Set(words);
-                if (words.length > 20 && uniqueWords.size / words.length < 0.3) {
-                    throw new Error('Message appears to be spam');
-                }
-                return true;
-            })
-    ],
-    handleContactSubmission
-);
-
-/**
- * GET /contact/responses - Display all contact form submissions
- */
-router.get('/responses', showContactResponses);
-
-export default router;
